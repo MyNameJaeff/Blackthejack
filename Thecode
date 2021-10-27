@@ -1,0 +1,125 @@
+import random
+# deck = [2,3,4,5,6,7,8,9,10,"J","Q","K","A"]
+deck = [2,3,4,5,6,7,8,9,10,10,10,10,11] * 4
+def deal(deck):
+    hand = []
+    for i in range(2):
+        random.shuffle(deck)
+        card = deck.pop()
+        hand.append(card)
+    return hand
+
+def play_again():
+    global deck
+    print("----->")
+    again = input("Play again? (y/n?): ").lower()
+    print("----->\n")
+    if again == "y":
+        dealer_hand = []
+        player_hand = []
+        deck = [2,3,4,5,6,7,8,9,10,10,10,10,11]
+        game()
+    else:
+        print("----->")
+        print("Goodbye")
+        print("----->")
+        exit()
+
+def total(hand):
+
+    total = 0
+    for card in hand:
+        if card == 11:
+            if total >= 11: 
+                total += 1
+            else: total += 11
+        else:
+            total += card
+    return total
+
+def hit(hand):
+    card = deck.pop()
+    hand.append(card)
+    if(choice) == "s":
+        print("Dealer drew a",card,"for a hand of",str(hand),"totaling",total(hand),"")
+    elif(choice) == "h":
+        print("You drew a",card,"for a hand of",str(hand),"totaling",total(hand),"")
+    print("----->\n")
+    return hand
+
+def print_results(dealer_hand, player_hand):
+	print("The dealer has a " + str(dealer_hand) + "for a total of" + str(total(dealer_hand)))
+	print("You have a " + str(player_hand) + "for a total of" + str(total(player_hand)))
+
+def blackjack(dealer_hand, player_hand):
+    if total(player_hand) == 21:
+        print("Congrats you got blackjack!")
+        play_again()
+    elif total(dealer_hand) == 21:
+        print("Dealer got blackjack. Better luck next time")
+        play_again()
+
+def score(dealer_hand, player_hand):
+    if total(player_hand) > 21:
+        print("\nYou busted")
+    elif total(dealer_hand) > 21:
+        print("\nDealer busted")
+    elif total(player_hand) < total(dealer_hand):
+        print("----->")
+        print("Dealer has",total(dealer_hand),"which is higher than you. You loose")
+        print("----->")
+    elif total(dealer_hand) < total(player_hand):
+        print("----->")
+        print("You have ",total(player_hand),"which is higher than ",total(dealer_hand), ". You win!")
+        print("----->\n")
+
+def game():
+    global choice
+    print("----->")
+    print ("WELCOME TO BLACKJACK!")
+    print("----->\n")
+    dealer_hand = deal(deck)
+    player_hand = deal(deck)
+    if total(player_hand) == 21:
+        print("Congrats you got a blackjack!\n")
+        play_again()
+    elif total(dealer_hand) == 21:
+        print("Dealer got blackjack. Better luck next time\n")
+        play_again()
+    print("----->")
+    print ("The dealer is showing a " + str(dealer_hand[0]))
+    print ("You have a " + str(player_hand) + " for a total of " + str(total(player_hand)))
+    print("----->\n")
+    blackjack(dealer_hand, player_hand)
+    quit=False
+
+    while not quit:
+        print("----->")
+        choice = input("Do you want to [H]it, [S]tand, or [Q]uit: ").lower()
+        if choice == 'h':
+            hit(player_hand)
+            if total(player_hand)>21:
+                print('You busted\n')
+                play_again()
+        elif choice=='s':
+            print("----->\n")
+            print("----->")
+            print("Dealer has", dealer_hand, "which totals", total(dealer_hand))
+            while total(dealer_hand)<17:
+                hit(dealer_hand)
+                if total(dealer_hand)>21:
+                    print('Dealer busts, you win!\n')
+                    play_again()
+            if total(dealer_hand) == total(player_hand):
+                print("You have",(player_hand),"=",total(player_hand),"and dealer has",(dealer_hand),"=",total(dealer_hand),"so its a tie\n")
+                play_again()
+                break
+            print("----->\n")
+            score(dealer_hand,player_hand)
+            play_again()
+        elif choice == "q":
+            print("Bye!\n----->\n")
+            quit=True
+            exit()
+if __name__ == "__main__":
+    game()
